@@ -10,7 +10,6 @@ namespace Generally
 {
     public class MsDBConn : IMsDBConn, IDisposable
     {
-        IConfiguration _config;
         IDbConnection _conn;
         IDbTransaction _tran;
 
@@ -23,28 +22,33 @@ namespace Generally
         {
             get { return _tran; }
         }
+
         const char dbParamPrefix = '@';
-        public MsDBConn(IConfiguration config)
+        public MsDBConn(string ConnStr)
         {
-            _config = config;
-            _conn = new SqlConnection(_config.GetConnectionString("DefConnectionStr"));
+            _conn = new SqlConnection(ConnStr);
             if (_conn.State != ConnectionState.Open)
                 _conn.Open();
 
             if (_tran == null)
                 _tran = _conn.BeginTransaction();
         }
-
-        public int Add<T>(T data)
+        
+        public int Add<T>(T data, List<string> NotMatchList = null)
         {
-            int num = _conn.Execute(this.CreateInsertSql<T>(), data, _tran);
+            int num = _conn.Execute(this.CreateInsertSql<T>(NotMatchList), data, _tran);
+            return num;
+        }
+        public async Task<int> AddAsync<T>(T data, List<string> NotMatchList = null)
+        {
+            int num = await _conn.ExecuteAsync(this.CreateInsertSql<T>(NotMatchList), data, _tran);
             return num;
         }
 
         public int Update<T>(string[] setColumns, T setValues, string[] conditionColumns = null, T conditionValues = default(T))
         {
             int index = 0;
-            if (setColumns != null || setColumns.Length <= 0) return 0;
+            if (setColumns == null || setColumns.Length <= 0) return 0;
 
             if (setValues == null)
             {
@@ -80,9 +84,52 @@ namespace Generally
             return index;
         }
 
+        public async Task<int> UpdateAsync<T>(string[] setColumns, T setValues, string[] conditionColumns = null, T conditionValues = default(T))
+        {
+            int index = 0;
+            if (setColumns == null || setColumns.Length <= 0) return 0;
+
+            if (setValues == null)
+            {
+                // "更新欄位為空，無法更新資料";
+                return 0;
+            }
+            Dictionary<string, object> setValueDictionary =
+                setValues.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(setValues, null));
+            if (setColumns.Except(setValueDictionary.Keys).Any())
+            {
+                //"更新欄位無法對應更新資料"
+                return 0;
+            }
+            if ((conditionColumns == null && conditionValues != null) || (conditionColumns != null && conditionValues == null))
+            {
+                //"條件欄位無法對應條件資料"
+                return 0;
+            }
+            Dictionary<string, object> conditionValueDictionary =
+                conditionValues.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(conditionValues, null));
+
+            if (conditionColumns.Except(conditionValueDictionary.Keys).Any())
+            {
+                //"查詢條件欄位無法對應資料欄位"
+                return 0;
+            }
+
+            T[] paramsArray = { setValues, conditionValues };
+            index = await this._conn.ExecuteAsync(CreateUpdateSql<T>(setColumns, conditionColumns), paramsArray, this._tran);
+
+            return index;
+        }
+
         public int Delete<T>(T data)
         {
             return this._conn.Execute(CreateDeleteSql<T>(), data, this._tran);
+        }
+        public async Task<int> DeleteAsync<T>(T data)
+        {
+            return await this._conn.ExecuteAsync(CreateDeleteSql<T>(), data, this._tran);
         }
 
         public IEnumerable<T> Query<T>(string sSqlCmd, IDynamicParameters param = null)
@@ -98,18 +145,23 @@ namespace Generally
             var result = await _conn.QueryAsync<T>(sSqlCmd, param: param, transaction: _tran);
             return result;
         }
-
+        
         public int Excute(string sql, SqlMapper.IDynamicParameters param)
         {
             return _conn.Execute(sql, param, transaction: _tran);
         }
-
+        
+        public async Task<int> ExecuteAsync(string sql, SqlMapper.IDynamicParameters param)
+        {
+            return await _conn.ExecuteAsync(sql, param, transaction: _tran);
+        }
+        
         private string CreateInsertSql<T>(List<string> NotMatchList = null)
         {
             var typeList = typeof(T).GetProperties();
 
             StringBuilder sbsql = new StringBuilder();
-            sbsql.Append(string.Format(@$"Insert Into {typeof(T).Name}"));
+            sbsql.Append(string.Format(@$"Insert Into [{typeof(T).Name}]"));
 
             List<string> colList = new List<string>();
             List<string> valList = new List<string>();
@@ -124,11 +176,11 @@ namespace Generally
             sbsql.Append($@" values({String.Join(",", valList.ToArray())})");
             return sbsql.ToString();
         }
-
+       
         private string CreateUpdateSql<T>(string[] setColumns, string[] coditionColumns)
         {
-            if (setColumns != null || setColumns.Length <= 0) return "";
-            string sSql = $@"UPDATE {typeof(T).Name} set ";
+            if (setColumns == null || setColumns.Length <= 0) return "";
+            string sSql = $@"UPDATE [{typeof(T).Name}] set ";
             List<string> setColList = new List<string>();
 
             foreach (var col in setColumns)
@@ -150,6 +202,7 @@ namespace Generally
             }
             return sSql;
         }
+       
         private string CreateDeleteSql<T>()
         {
             var typeList = typeof(T).GetProperties();
@@ -179,7 +232,7 @@ namespace Generally
             finally
             {
                 _tran.Dispose();
-                _tran = null;
+             //   _tran = null;
             }
         }
 
@@ -218,7 +271,6 @@ namespace Generally
                 }
             }
         }
-
 
     }
 }

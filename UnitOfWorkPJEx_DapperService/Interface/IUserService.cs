@@ -4,13 +4,13 @@ namespace UnitOfWorkPJEx_DapperService.Interface
 {
     public interface IUserService
     {
-        Task<User> GetById(int UserId);
+        Task<User?> GetById(int UserId);
 
         Task<IEnumerable<User>> GetUserAll();
 
-        Task<bool> AddUser(User user);
-        Task<bool> UpdateUser(User user);
+        Task<bool> AddAsync(User user);
+        Task<bool> UpdateAsync(User user);
 
-        Task<bool> DeleteUser(int UserId);
+        Task<bool> DeleteAsync(int UserId);
     }
 }

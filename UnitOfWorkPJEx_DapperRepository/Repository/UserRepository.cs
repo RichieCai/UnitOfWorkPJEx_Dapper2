@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Generic.Interface;
+using System.Linq.Expressions;
 using UnitOfWorkPJEx_DapperRepository.Interface;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace UnitOfWorkPJEx_DapperRepository.Repository
 {
@@ -14,7 +14,7 @@ namespace UnitOfWorkPJEx_DapperRepository.Repository
             _msDBConn = msDBConn;
         }
 
-        public async Task<T> GetById<T>(int UserId)
+        public async Task<T?> GetById<T>(string UserId)
         {
             var parameter = new DynamicParameters();
             parameter.Add("UserId", UserId);
@@ -24,63 +24,72 @@ namespace UnitOfWorkPJEx_DapperRepository.Repository
 
         }
 
+
         public async Task<IEnumerable<T>> GetAll<T>()
         {
             string sCmd = @"select * from [User] ";
             var Userlist = await _msDBConn.QueryAsync<T>(sCmd);
             return Userlist;
         }
+        //public virtual IEnumerable<T> Get<T>(  Expression<Func<T, bool>> filter = null,
+        //   Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        //   string includeProperties = "")
+        //{
+        //    IQueryable<T> query = dbSet;
 
-        public async Task<bool> Add(User user)
+        //    if (filter != null)
+        //    {
+        //        query = query.Where(filter);
+        //    }
+
+        //    foreach (var includeProperty in includeProperties.Split
+        //        (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        //    {
+        //        query = query.Include(includeProperty);
+        //    }
+
+        //    if (orderBy != null)
+        //    {
+        //        return orderBy(query).ToList();
+        //    }
+        //    else
+        //    {
+        //        return query.ToList();
+        //    }
+        //}
+
+        public async Task<bool> AddAsync(User user)
         {
-
-            string sSqlCmd = @"
-                Insert Into [User]([UserName],[Age],[Sex],[CountryId],[CityId]) 
-                values(@UserName,@Age,@Sex,@CountryId,@CityId) ";
-            var parameter = new DynamicParameters();
-            parameter.Add("UserName", user.UserName);
-            parameter.Add("Age", user.Age);
-            parameter.Add("Sex", user.Sex);
-            parameter.Add("CountryId", user.CountryId);
-            parameter.Add("CityId", user.CityId);
-
-            int iResult = _msDBConn.Excute(sSqlCmd, parameter);
-
-            return (iResult > 0) ? true : false;
-
-        }
-        public async Task<bool> Update(User user)
-        {
-            var parameter = new DynamicParameters();
-            parameter.Add("UserName", user.UserName);
-            parameter.Add("Age", user.Age);
-            parameter.Add("Sex", user.Sex);
-            parameter.Add("CountryId", user.CountryId);
-            parameter.Add("CityId", user.CityId);
-            parameter.Add("UserId", user.UserId);
-
-            string sSqlCmd = @"
-                    Update [User]
-                    set UserName=@UserName,Age=@Age,Sex=@Sex,CountryId=@CountryId,CityId=@CityId
-                    where UserId=@UserId  ";
-
-            var command = new CommandDefinition(sSqlCmd, parameter, flags: CommandFlags.Buffered);
-            var sql = command.CommandText; // 此處獲取 SQL 查詢
-            var sqlParameters = command.Parameters; // 此處獲取參數的集合
-
-            int iResult = _msDBConn.Excute(sSqlCmd, parameter);
-
+            List<string> NotMatchList = new List<string>();
+            NotMatchList.Add("UserId");
+            int iResult = await _msDBConn.AddAsync(user, NotMatchList);
             return (iResult > 0) ? true : false;
         }
-        public async Task<bool> Delete(int iUserId)
+        public async Task<bool> UpdateAsync(User user)
         {
-            var parameter = new DynamicParameters();
-            parameter.Add("UserId", iUserId);
+            string[] setCol = new string[] { "UserName", "Age", "Sex", "CountryId", "CityId" };
+            string[] ConditionCol = new string[] { "UserId" };
+            //int iResult = await _msDBConn.UpdateAsync<User>( setCol, user, ConditionCol, user);
 
-            string sSqlCmd = @"
-                    delete [User]
-                    where UserId=@UserId  ";
-            int iResult = _msDBConn.Excute(sSqlCmd, parameter);
+            int iResult = await _msDBConn.UpdateAsync<User>(setCol, user, ConditionCol, user);
+            return (iResult > 0) ? true : false;
+        }
+        public  bool Update(User user)
+        {
+            string[] setCol = new string[] { "UserName", "Age", "Sex", "CountryId", "CityId" };
+            string[] ConditionCol = new string[] { "UserId" };
+            int iResult =  _msDBConn.Update<User>(setCol, user, ConditionCol, user);
+
+            return (iResult > 0) ? true : false;
+        }
+
+
+        public async Task<bool> DeleteAsync(User user)
+        {
+
+           // User user=await GetById<User>(iUserId);
+            int iResult = await _msDBConn.DeleteAsync<User>(user);
+
             return (iResult > 0) ? true : false;
         }
     }

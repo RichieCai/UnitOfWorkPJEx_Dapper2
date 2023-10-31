@@ -9,7 +9,7 @@ namespace UnitOfWorkPJEx_DapperRepository.Models.Data
         public string? UserName { get; set; }
         public int? Age { get; set; }
         public byte? Sex { get; set; }
-        public string? CountryId { get; set; }
+        public int? CountryId { get; set; }
         public string? CityId { get; set; }
     }
 }

@@ -19,9 +19,6 @@ namespace UnitOfWorkPJEx_DapperRepository.Context
 
         public virtual DbSet<City> Cities { get; set; } = null!;
         public virtual DbSet<Country> Countries { get; set; } = null!;
-        public virtual DbSet<Log> Logs { get; set; } = null!;
-        public virtual DbSet<Score> Scores { get; set; } = null!;
-        public virtual DbSet<Test1> Test1s { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +26,10 @@ namespace UnitOfWorkPJEx_DapperRepository.Context
             modelBuilder.Entity<City>(entity =>
             {
                 entity.ToTable("City");
+
+                entity.Property(e => e.CityId)
+                    .HasMaxLength(4)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.CityName)
                     .HasMaxLength(10)
@@ -42,67 +43,22 @@ namespace UnitOfWorkPJEx_DapperRepository.Context
                 entity.ToTable("Country");
 
                 entity.Property(e => e.CountryName)
-                    .HasMaxLength(50)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Orderby).HasColumnName("orderby");
-
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Log>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Num).HasColumnName("num");
-            });
-
-            modelBuilder.Entity<Score>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Score1)
-                    .HasColumnType("decimal(18, 2)")
-                    .HasColumnName("score");
-            });
-
-            modelBuilder.Entity<Test1>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("test1");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Num).HasColumnName("num");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Age).HasColumnName("age");
-
                 entity.Property(e => e.CityId)
-                    .HasMaxLength(50)
+                    .HasMaxLength(4)
                     .IsUnicode(false);
-
-                entity.Property(e => e.CountryId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Sex).HasColumnName("sex");
 
                 entity.Property(e => e.UserName)
-                    .HasMaxLength(50)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
             });
 

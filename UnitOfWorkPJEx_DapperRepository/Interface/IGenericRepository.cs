@@ -2,10 +2,10 @@
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        TEntity? GetById(int id);
-        IEnumerable<TEntity> GetAll();
-        void Add(TEntity entity);
-        void Delete(TEntity entity);
-        void Update(TEntity entity);
+        TEntity? GetById<TEntity>(int id, string sTableName = null, string sConditionCol = null);
+        IEnumerable<TEntity> GetAll<TEntity>(string sTableName = null);
+        Task<bool> Add(TEntity entity);
+        Task<bool> Delete(TEntity entity);
+        Task<bool> Update(TEntity entity);
     }
 }

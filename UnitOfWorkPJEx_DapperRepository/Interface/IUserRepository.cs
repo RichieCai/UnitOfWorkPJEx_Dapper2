@@ -6,12 +6,14 @@ namespace UnitOfWorkPJEx_DapperRepository.Interface
 {
     public interface IUserRepository
     {
-        Task<T> GetById<T>(int UserId);
+        Task<T?> GetById<T>(string UserId);
         Task<IEnumerable<User>> GetAll<User>();
-        Task<bool> Add(User user);
+        Task<bool> AddAsync(User user);
 
-        Task<bool> Update(User user);
+        Task<bool> UpdateAsync(User user);
 
-        Task<bool> Delete(int iUserId);
+        bool Update(User user);
+
+        Task<bool> DeleteAsync(User user);
     }
 }

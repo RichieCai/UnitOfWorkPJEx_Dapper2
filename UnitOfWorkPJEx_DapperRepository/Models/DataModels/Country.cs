@@ -7,7 +7,7 @@ namespace UnitOfWorkPJEx_DapperRepository.Models.DataModels
     {
         public int CountryId { get; set; }
         public string? CountryName { get; set; }
-        public string? Status { get; set; }
+        public bool? Status { get; set; }
         public int? Orderby { get; set; }
     }
 }

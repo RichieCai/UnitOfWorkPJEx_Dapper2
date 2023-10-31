@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnitOfWorkPJEx_DapperRepository.Models.ViewModels
+namespace UnitOfWorkPJEx_DapperRepository_Test.MockData
 {
-    public class CountryVM
+    internal class MockData_ModelsData_Citry
     {
-
     }
 }

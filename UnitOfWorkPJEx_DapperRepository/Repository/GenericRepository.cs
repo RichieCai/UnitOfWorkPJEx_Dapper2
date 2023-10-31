@@ -1,6 +1,5 @@
 ﻿using Dapper;
-using Microsoft.Extensions.Configuration;
-using System.Data;
+using Generic.Interface;
 using UnitOfWorkPJEx_DapperRepository.Interface;
 
 
@@ -8,39 +7,38 @@ namespace UnitOfWorkPJEx_DapperRepository.Repository
 {
     public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-
-        internal IDbConnection _connection;
-        internal IDbTransaction _transaction;
-
-        protected GenericRepository(IUnitOfWork_Dapper unitOfWork)
+        private readonly IMsDBConn _msDBConn;
+        protected GenericRepository(IMsDBConn msDBConn)
         {
-            _connection = unitOfWork.Connection;
-            _transaction = unitOfWork.Transaction;
+            _msDBConn = msDBConn;
         }
-        public TEntity GetById(int id)
+        public TEntity? GetById<TEntity>(int id,string sTableName=null,string sConditionCol=null)
         {
             var parameters = new DynamicParameters();
+            string sNewTableName=(string.IsNullOrEmpty(sTableName))? typeof(TEntity).Name : sTableName;
+
             parameters.Add("UserId", id);
-            var sSqlCmd = "select * from [User] where UserId=@UserId";
-            return _connection.QuerySingle<TEntity>(sSqlCmd, commandType: CommandType.Text);
+            var sSqlCmd = @$"select * from [{sNewTableName}] where UserId=@UserId";
+            return _msDBConn.Query<TEntity>(sSqlCmd).FirstOrDefault();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAll<TEntity>(string sTableName = null)
         {
-            var sSqlCmd = "select * from [User] where UserId=@UserId";
-            return _connection.Query<TEntity>(sSqlCmd, commandType: CommandType.Text);
+            string sNewTableName = (string.IsNullOrEmpty(sTableName)) ? typeof(TEntity).Name : sTableName;
+            var sSqlCmd = @$"select * from [{sNewTableName}] ";
+            return _msDBConn.Query<TEntity>(sSqlCmd);
         }
-        public void Add(TEntity entity)
+        public async Task<bool> Add(TEntity entity)
         {
-
+            return false;
         }
-        public void Delete(TEntity entity)
+        public async Task<bool> Delete(TEntity entity)
         {
-
+            return false;
         }
-        public void Update(TEntity entity)
+        public async Task<bool> Update(TEntity entity)
         {
-
+            return false;
         }
     }
 }
