@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UnitOfWorkPJEx_DapperRepository.Context;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
+using UnitOfWorkPJEx_DapperRepository.Models.Input;
 using UnitOfWorkPJEx_DapperService.Interface;
 
 namespace UnitOfWorkPJEx_Dapper.Controllers
@@ -45,8 +46,21 @@ namespace UnitOfWorkPJEx_Dapper.Controllers
             return Ok(vUser);
         }
 
+        [HttpGet("Query")]
+        public async Task<IActionResult> Get([FromQuery] UserInput input)
+        {
+            _logger.LogInformation($"{this.GetType()},調用");
+            var vUser = await _iUserService.Get(input);
+            if (vUser == null)
+            {
+                return NotFound();
+            }
+            return Ok(vUser);
+        }
+
+
         [HttpPost]
-        public async Task<IActionResult> AddUser(User user)
+        public async Task<IActionResult> AddUser([Bind("UserName,Age,Sex,CountryId,CityId")] User user)
         {
             _logger.LogInformation($"{this.GetType()},調用");
             var IsCreated = await _iUserService.AddAsync(user);

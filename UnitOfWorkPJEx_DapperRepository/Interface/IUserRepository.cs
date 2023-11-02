@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using Generally;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
+using UnitOfWorkPJEx_DapperRepository.Models.Input;
+using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
 
 namespace UnitOfWorkPJEx_DapperRepository.Interface
 {
@@ -8,6 +10,7 @@ namespace UnitOfWorkPJEx_DapperRepository.Interface
     {
         Task<T?> GetById<T>(string UserId);
         Task<IEnumerable<User>> GetAll<User>();
+        Task<ResultVM<UserVM>> Get<UserVM>(UserInput input);
         Task<bool> AddAsync(User user);
 
         Task<bool> UpdateAsync(User user);

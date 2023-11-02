@@ -19,8 +19,22 @@ namespace Generic.Interface
         Task<int> DeleteAsync<T>(T data);
         IEnumerable<T> Query<T>(string sSqlCmd, IDynamicParameters param = null);
         Task<IEnumerable<T>> QueryAsync<T>(string sSqlCmd, IDynamicParameters param = null);
+
+        Task<T> QueryFirstAsync<T>(string sSqlCmd, IDynamicParameters param = null);
+
+        Task<T> QueryFirstOrDefaultAsync<T>(string sSqlCmd, IDynamicParameters param = null);
+
+        Task<T> QuerySingleAsync<T>(string sSqlCmd, IDynamicParameters param = null);
+
+        Task<T> QuerySingleOrDefaultAsync<T>(string sSqlCmd, IDynamicParameters param = null);
+
         int Excute(string sql, IDynamicParameters param);
         Task<int> ExecuteAsync(string sql, SqlMapper.IDynamicParameters param);
+
+        T ExecuteScalar<T>(string sSqlCmd, IDynamicParameters param = null);
+
+        Task<T> ExecuteScalarAsync<T>(string sSqlCmd, IDynamicParameters param = null);
+
         void Commit();
         void Rollback();
         void Dispose();

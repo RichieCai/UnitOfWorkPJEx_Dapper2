@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Generic.Interface;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Text;
 using static Dapper.SqlMapper;
@@ -33,7 +32,7 @@ namespace Generally
             if (_tran == null)
                 _tran = _conn.BeginTransaction();
         }
-        
+
         public int Add<T>(T data, List<string> NotMatchList = null)
         {
             int num = _conn.Execute(this.CreateInsertSql<T>(NotMatchList), data, _tran);
@@ -145,17 +144,53 @@ namespace Generally
             var result = await _conn.QueryAsync<T>(sSqlCmd, param: param, transaction: _tran);
             return result;
         }
-        
+
+        public async Task<T> QueryFirstAsync<T>(string sSqlCmd, IDynamicParameters param = null)
+        {
+            var result = await _conn.QueryFirstAsync<T>(sSqlCmd, param: param, transaction: _tran);
+            return result;
+        }
+
+        public async Task<T> QueryFirstOrDefaultAsync<T>(string sSqlCmd, IDynamicParameters param = null)
+        {
+            var result = await _conn.QueryFirstOrDefaultAsync<T>(sSqlCmd, param: param, transaction: _tran);
+            return result;
+        }
+
+        public async Task<T> QuerySingleAsync<T>(string sSqlCmd, IDynamicParameters param = null)
+        {
+            var result = await _conn.QuerySingleAsync<T>(sSqlCmd, param: param, transaction: _tran);
+            return result;
+        }
+
+        public async Task<T> QuerySingleOrDefaultAsync<T>(string sSqlCmd, IDynamicParameters param = null)
+        {
+            var result = await _conn.QuerySingleOrDefaultAsync<T>(sSqlCmd, param: param, transaction: _tran);
+            return result;
+        }
+
         public int Excute(string sql, SqlMapper.IDynamicParameters param)
         {
             return _conn.Execute(sql, param, transaction: _tran);
         }
-        
+
         public async Task<int> ExecuteAsync(string sql, SqlMapper.IDynamicParameters param)
         {
             return await _conn.ExecuteAsync(sql, param, transaction: _tran);
         }
-        
+
+        public T ExecuteScalar<T>(string sSqlCmd, IDynamicParameters param = null)
+        {
+            var result = _conn.ExecuteScalar<T>(sSqlCmd, param: param, transaction: _tran);
+            return result;
+        }
+
+        public async Task<T> ExecuteScalarAsync<T>(string sSqlCmd, IDynamicParameters param = null)
+        {
+            var result = await _conn.ExecuteScalarAsync<T>(sSqlCmd, param: param, transaction: _tran);
+            return result;
+        }
+
         private string CreateInsertSql<T>(List<string> NotMatchList = null)
         {
             var typeList = typeof(T).GetProperties();
@@ -176,7 +211,7 @@ namespace Generally
             sbsql.Append($@" values({String.Join(",", valList.ToArray())})");
             return sbsql.ToString();
         }
-       
+
         private string CreateUpdateSql<T>(string[] setColumns, string[] coditionColumns)
         {
             if (setColumns == null || setColumns.Length <= 0) return "";
@@ -202,7 +237,7 @@ namespace Generally
             }
             return sSql;
         }
-       
+
         private string CreateDeleteSql<T>()
         {
             var typeList = typeof(T).GetProperties();
@@ -232,7 +267,7 @@ namespace Generally
             finally
             {
                 _tran.Dispose();
-             //   _tran = null;
+                //   _tran = null;
             }
         }
 

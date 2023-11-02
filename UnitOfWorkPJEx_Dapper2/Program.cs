@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDIServices(builder.Configuration);
 builder.Services.AddTransient<IUserService, UserService>();
-
+builder.Services.AddTransient<ICountryService, CountryService>();
 builder.Logging.AddLog4Net("Configs/log4net.Config");
 
 

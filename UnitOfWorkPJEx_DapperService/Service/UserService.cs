@@ -6,6 +6,8 @@ using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
 using UnitOfWorkPJEx_DapperService.Interface;
 using System.Linq;
 using System.Reflection.Metadata;
+using UnitOfWorkPJEx_DapperRepository.Models.Input;
+using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
 
 namespace UnitOfWorkPJEx_DapperService.Service
 {
@@ -28,6 +30,13 @@ namespace UnitOfWorkPJEx_DapperService.Service
             var User = await _userRepository.GetById<User>(UserId.ToString());
             return User;
         }
+
+        public async Task<ResultVM<UserVM>> Get(UserInput input)
+        {
+            var User = await _userRepository.Get<UserVM>(input);
+            return User;
+        }
+
 
         public async Task<IEnumerable<User>> GetUserAll()
         {

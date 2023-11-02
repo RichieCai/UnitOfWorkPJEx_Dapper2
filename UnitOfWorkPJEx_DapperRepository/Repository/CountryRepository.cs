@@ -1,14 +1,6 @@
 ﻿using Dapper;
 using Generic.Interface;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnitOfWorkPJEx_DapperRepository.Interface;
-using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
 
 namespace UnitOfWorkPJEx_DapperRepository.Repository
 {
@@ -26,8 +18,7 @@ namespace UnitOfWorkPJEx_DapperRepository.Repository
             parameter.Add("CountryId", CountryId);
             string sCmd = @$" select * from [Country] where CountryId=@CountryId";
 
-           var result= await _conn.QueryAsync<Country>(sCmd, parameter);
-            return result.SingleOrDefault();
+           return await _conn.QuerySingleAsync<Country>(sCmd, parameter);
 
         }
 

@@ -21,7 +21,7 @@ namespace UnitOfWorkPJEx_DapperRepository
 
             //services.AddSingleton<IConfiguration>(configuration);
             services.AddTransient<IUserRepository, UserRepository>();
-
+            services.AddTransient<ICountryRepository, CountryRepository>();
             //  services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             //  services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 

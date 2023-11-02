@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
 
 namespace UnitOfWorkPJEx_DapperRepository.Models.ViewModels
 {
-    public class UserVM
+    public class UserVM:User
     {
     }
 }
