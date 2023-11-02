@@ -20,7 +20,7 @@ namespace UnitOfWorkPJEx_Dapper.Controllers
         [HttpGet("{CountryId}")]
         public async Task<IActionResult> Get(string CountryId)
         {
-            var vResult=  _countryService.Get(CountryId);
+            var vResult= await  _countryService.Get(CountryId);
             if (vResult == null)
                 return NotFound();
 
