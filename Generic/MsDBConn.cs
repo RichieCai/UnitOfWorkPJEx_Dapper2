@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using Generic.Interface;
+using MyCommon.Interface;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Text;
 using static Dapper.SqlMapper;
 
-namespace Generally
+namespace MyCommon
 {
     public class MsDBConn : IMsDBConn, IDisposable
     {

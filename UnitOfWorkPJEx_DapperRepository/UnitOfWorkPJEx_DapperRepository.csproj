@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Generic\Generic.csproj" />
+    <ProjectReference Include="..\Generic\MyCommon.csproj" />
   </ItemGroup>
 
 </Project>

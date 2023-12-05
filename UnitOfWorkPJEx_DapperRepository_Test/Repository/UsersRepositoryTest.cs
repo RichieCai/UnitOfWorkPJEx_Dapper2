@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Generic.Interface;
+using MyCommon.Interface;
 using Moq;
 using UnitOfWorkPJEx_DapperRepository.Interface;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
@@ -25,8 +25,8 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
         {
             //Arrange
             var user = MockData_ModelsData_User.GetUser(UserId.ToString());
-            _msDBConn.Setup(m => m.QueryAsync<User>(It.IsAny<string>(), It.IsAny<DynamicParameters>()))
-                .ReturnsAsync(new List<User> { user });
+            _msDBConn.Setup(m => m.QuerySingleAsync<User>(It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(user);
 
             //Act
             var actualUser = await _userRepository.GetById<User>(UserId);
@@ -39,7 +39,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
 
         [Theory]
         [InlineData("3")]
-        public async Task GetById_ReturnOneUser_WhenUserNotExists(string UserId)
+        public async Task GetById_ReturnNull_WhenUserNotExists(string UserId)
         {
             //Arrange
             var user = MockData_ModelsData_User.GetUser(UserId.ToString());
@@ -52,7 +52,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
         }
 
         [Fact]
-        public async Task GetAll_ReturnAllUser_WhenUserNotNull()
+        public async Task GetAll_ReturnAllUser_WhenUserHaveData()
         {
             //Arrange
             var userlist = MockData_ModelsData_User.GetUserAll();
@@ -67,7 +67,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
         }
 
         [Fact]
-        public async Task AddAsync_Returnbool_WhenIsSuccess()
+        public async Task AddAsync_ReturnTrue_WhenIsSuccess()
         {
             int iIsSunccess = 1;
             var user = MockData_ModelsData_User.AddUser();
@@ -79,7 +79,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
             Assert.True(actualResult);
         }
         [Fact]
-        public async Task AddAsync_Returnbool_WhenIsFailed()
+        public async Task AddAsync_ReturnFalse_WhenIsFailed()
         {
             int iIsSunccess = 0;
             //var user = MockData_ModelsData_User.AddUser();
@@ -94,7 +94,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
 
 
         [Fact]
-        public async Task UpdateAsync_Returnbool_WhenIsSuccess()
+        public async Task UpdateAsync_ReturnTrue_WhenIsSuccess()
         {
             int iIsSunccess = 1;
             var user = MockData_ModelsData_User.UpdateUserResult();
@@ -107,7 +107,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
         }
 
         [Fact]
-        public async Task UpdateAsync_Returnbool_WhenIsFailed()
+        public async Task UpdateAsync_ReturnFalse_WhenIsFailed()
         {
             int iIsSunccess = 0;
             var userAll = MockData_ModelsData_User.GetUserAll();
@@ -123,7 +123,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
 
         [Theory]
         [InlineData("2")]
-        public async Task DeleteAsync_Returnbool_WhenIsSuccess(string UserId)
+        public async Task DeleteAsync_ReturnTrue_WhenIsSuccess(string UserId)
         {
             int iIsSunccess = 1;
             var user = MockData_ModelsData_User.GetUser(UserId.ToString());
@@ -138,7 +138,7 @@ namespace UnitOfWorkPJEx_DapperRepository_Test.Repository
 
         [Theory]
         [InlineData("3")]
-        public async Task DeleteAsync_Returnbool_WhenIsFailed(string UserId)
+        public async Task DeleteAsync_ReturnFlase_WhenIsFailed(string UserId)
         {
             int iIsSunccess = 0;
             User user = new User();

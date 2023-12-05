@@ -1,7 +1,7 @@
 ﻿
 //using Microsoft.AspNetCore.Builder;
-using Generally;
-using Generic.Interface;
+using MyCommon;
+using MyCommon.Interface;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

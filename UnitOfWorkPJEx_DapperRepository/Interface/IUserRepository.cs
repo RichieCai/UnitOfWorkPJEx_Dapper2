@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Generally;
+using MyCommon;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
 using UnitOfWorkPJEx_DapperRepository.Models.Input;
 using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;

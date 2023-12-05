@@ -1,4 +1,4 @@
-﻿using Generic.Interface;
+﻿using MyCommon.Interface;
 using System.Linq.Expressions;
 using System;
 using UnitOfWorkPJEx_DapperRepository.Interface;

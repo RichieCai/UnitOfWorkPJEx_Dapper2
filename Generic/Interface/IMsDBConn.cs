@@ -2,7 +2,7 @@
 using System.Data;
 using static Dapper.SqlMapper;
 
-namespace Generic.Interface
+namespace MyCommon.Interface
 {
     public interface IMsDBConn
     {

@@ -14,11 +14,11 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         private readonly Mock<IUserService> _userServiceMock;
         private readonly UserController _userController;
         private readonly Mock<ILogger<UserController>> _loggerMock;
-       public UserControllerTest()
+        public UserControllerTest()
         {
-            _userServiceMock= new Mock<IUserService>();
-            _loggerMock= new Mock<ILogger<UserController>>();
-             _userController = new UserController(_userServiceMock.Object, _loggerMock.Object);
+            _userServiceMock = new Mock<IUserService>();
+            _loggerMock = new Mock<ILogger<UserController>>();
+            _userController = new UserController(_userServiceMock.Object, _loggerMock.Object);
 
         }
 
@@ -27,9 +27,9 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         {
             var userlist = MockData_ModelsData_User.GetUserAll();
 
-            _userServiceMock.Setup(ser=>ser.GetUserAll()).ReturnsAsync(userlist);
-            
-            var vResult=await _userController.GetAll();
+            _userServiceMock.Setup(ser => ser.GetUserAll()).ReturnsAsync(userlist);
+
+            var vResult = await _userController.GetAll();
 
             Assert.IsType<OkObjectResult>(vResult);
             var userResult = ((OkObjectResult)vResult).Value as IEnumerable<User>;
@@ -39,9 +39,9 @@ namespace UnitOfWorkPJEx_Dapper2_Test
 
         }
         [Fact]
-        public async Task GetAll_ReturnUserList_WhenUsersNoExist()
+        public async Task GetAll_ReturnNull_WhenUsersNoExist()
         {
-            _userServiceMock.Setup(ser => ser.GetUserAll()).ReturnsAsync(()=>null);
+            _userServiceMock.Setup(ser => ser.GetUserAll()).ReturnsAsync(() => null);
 
             var vResult = await _userController.GetAll();
 
@@ -50,7 +50,7 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         }
 
         [Fact]
-        public async Task Get_ReturnsOk_WhenUserExists()
+        public async Task Get_ReturnsOkUser_WhenUserExists()
         {
             int UserId = 1;
             var user = MockData_ModelsData_User.GetUser(UserId.ToString());
@@ -61,7 +61,7 @@ namespace UnitOfWorkPJEx_Dapper2_Test
 
             Assert.IsType<OkObjectResult>(vResult);
             Assert.NotNull(vResult);
-            var userResult =(User) ((OkObjectResult)vResult).Value;
+            var userResult = (User)((OkObjectResult)vResult).Value;
             Assert.Equal(userResult.UserId, user.UserId);
             _userServiceMock.Verify(c => c.GetById(UserId), Times.Once);
         }
@@ -71,7 +71,7 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         {
             int UserId = -1;
             _userServiceMock.Setup(ser => ser.GetById(It.IsAny<int>())).ReturnsAsync((int UserId) => (User)null);
-           // _userServiceMock.Setup(ser => ser.GetById(UserId)).ReturnsAsync(() => null);
+            // _userServiceMock.Setup(ser => ser.GetById(UserId)).ReturnsAsync(() => null);
 
             var vResult = await _userController.Get(UserId);
 
@@ -80,8 +80,8 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         }
 
 
-            [Fact]
-        public async Task AddUser()
+        [Fact]
+        public async Task AddUser_ReturnTrue_WhenIsSuccess()
         {
             var user = MockData_ModelsData_User.AddUser();
             _userServiceMock.Setup(ser => ser.AddAsync(It.IsAny<User>())).ReturnsAsync(true);
@@ -95,12 +95,12 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         }
 
         [Fact]
-        public async Task UpdateUser()
+        public async Task UpdateUser_ReturnTrue_WhenIsSuccess()
         {
             var user = MockData_ModelsData_User.UpdateUserResult();
             _userServiceMock.Setup(ser => ser.UpdateAsync(It.IsAny<User>())).ReturnsAsync(true);
 
-            var vResult=await _userController.UpdateUser(user);
+            var vResult = await _userController.UpdateUser(user);
 
             Assert.IsType<OkObjectResult>(vResult);
             var okResult = (OkObjectResult)vResult;
@@ -110,12 +110,12 @@ namespace UnitOfWorkPJEx_Dapper2_Test
         }
 
         [Fact]
-        public async Task DeleteUser()
+        public async Task DeleteUser_ReturnTrue_WhenIsSuccess()
         {
             int UserId = 1;
             _userServiceMock.Setup(ser => ser.DeleteAsync(It.IsAny<int>())).ReturnsAsync(true);
 
-            var vResult= await _userController.DeleteUser(UserId);
+            var vResult = await _userController.DeleteUser(UserId);
 
             Assert.IsType<OkObjectResult>(vResult);
             var okResult = (OkObjectResult)vResult;

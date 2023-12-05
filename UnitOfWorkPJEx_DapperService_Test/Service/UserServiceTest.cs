@@ -1,4 +1,4 @@
-﻿using Generic.Interface;
+﻿using MyCommon.Interface;
 using Moq;
 using UnitOfWorkPJEx_DapperRepository.Interface;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
