@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "UnitOfWorkPJEx_DapperRepository_Test": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60682;http://localhost:60685"
+    }
+  }
+}

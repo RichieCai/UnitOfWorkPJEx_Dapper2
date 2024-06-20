@@ -24,9 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UnitOfWorkPJEx_Dapper2\UnitOfWorkPJEx_Dapper2.csproj" />
-    <ProjectReference Include="..\UnitOfWorkPJEx_DapperRepository\UnitOfWorkPJEx_DapperRepository.csproj" />
     <ProjectReference Include="..\UnitOfWorkPJEx_DapperRepository_Test\UnitOfWorkPJEx_DapperRepository_Test.csproj" />
-    <ProjectReference Include="..\UnitOfWorkPJEx_DapperService\UnitOfWorkPJEx_DapperService.csproj" />
   </ItemGroup>
 
 </Project>

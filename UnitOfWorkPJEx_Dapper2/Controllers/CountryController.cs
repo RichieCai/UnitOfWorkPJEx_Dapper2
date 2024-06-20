@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using UnitOfWorkPJEx_DapperRepository.Models.Data;
-using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
 using UnitOfWorkPJEx_DapperService.Interface;
 
 namespace UnitOfWorkPJEx_Dapper.Controllers

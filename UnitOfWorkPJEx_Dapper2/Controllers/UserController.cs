@@ -14,7 +14,7 @@ namespace UnitOfWorkPJEx_Dapper.Controllers
         private ILogger<UserController> _logger;
 
 
-        public UserController(IUserService iUserService, ILogger<UserController> logger)
+        public UserController(IUserService iUserService,  ILogger<UserController> logger)
         {
             _iUserService = iUserService;
             _logger = logger;

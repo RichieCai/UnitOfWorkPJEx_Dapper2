@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  webredisex:
+    container_name: webredisex
+    image: ${DOCKER_REGISTRY-}webredisex
+    build:
+      context: .
+      dockerfile: WebRedisEx/Dockerfile
+    ports:
+      - "8081:80" 

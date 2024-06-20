@@ -1,10 +1,8 @@
-using log4net.Config;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using UnitOfWorkPJEx_DapperRepository;
-using UnitOfWorkPJEx_DapperRepository.Context;
 using UnitOfWorkPJEx_DapperService.Interface;
 using UnitOfWorkPJEx_DapperService.Service;
+using  UnitOfWorkPJEx_DapperService;
+using UnitOfWorkPJEx_DapperRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDIServices(builder.Configuration);
+
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICountryService, CountryService>();
+builder.Services.AddTransient<IUserService2, UserService2>();
 builder.Logging.AddLog4Net("Configs/log4net.Config");
 
-
+ServiceExtension_Service.AddDbContexts(builder);//將註冊地方更改為UserManageRepository專案;
+ServiceExtension_Repository.AddDbContexts(builder);//將註冊地方更改為UserManageRepository專案;
 
 //builder.Services.AddSwaggerGen(c =>
 //{

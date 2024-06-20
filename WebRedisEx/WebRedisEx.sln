@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRedisEx", "WebRedisEx\WebRedisEx.csproj", "{1A3012CF-6864-4665-BCE4-BD3224F26B89}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1EA4D986-49B6-40E5-9E59-71F3F2ABFA39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A3012CF-6864-4665-BCE4-BD3224F26B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A3012CF-6864-4665-BCE4-BD3224F26B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A3012CF-6864-4665-BCE4-BD3224F26B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A3012CF-6864-4665-BCE4-BD3224F26B89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EA4D986-49B6-40E5-9E59-71F3F2ABFA39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EA4D986-49B6-40E5-9E59-71F3F2ABFA39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EA4D986-49B6-40E5-9E59-71F3F2ABFA39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EA4D986-49B6-40E5-9E59-71F3F2ABFA39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C894AA18-7274-446F-A584-2DC341F857A4}
+	EndGlobalSection
+EndGlobal

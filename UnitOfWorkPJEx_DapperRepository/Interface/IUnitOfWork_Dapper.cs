@@ -6,7 +6,7 @@ namespace UnitOfWorkPJEx_DapperRepository.Interface
     {
         IDbConnection Connection { get; }
         IDbTransaction Transaction { get; }
-        IUserRepository Users { get; }
+        IUserUnitRepository Users { get; }
 
         void Commit();
     }

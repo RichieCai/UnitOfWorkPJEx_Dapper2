@@ -1,13 +1,9 @@
 ﻿using MyCommon.Interface;
-using System.Linq.Expressions;
-using System;
 using UnitOfWorkPJEx_DapperRepository.Interface;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using UnitOfWorkPJEx_DapperService.Interface;
-using System.Linq;
-using System.Reflection.Metadata;
 using UnitOfWorkPJEx_DapperRepository.Models.Input;
 using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
+using UnitOfWorkPJEx_DapperService.Interface;
 
 namespace UnitOfWorkPJEx_DapperService.Service
 {

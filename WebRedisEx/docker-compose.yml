@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  webredisex:
+    container_name: webredisex
+    image: ${DOCKER_REGISTRY-}webredisex
+    build:
+      context: .
+      dockerfile: WebRedisEx/Dockerfile
+    ports:
+      - "8082:80" 
+  redis:
+    image: redis
+    ports:
+      - 6378:6379
+
+  redis-admin:
+    image: marian/rebrow
+    ports:
+      - 5002:5001
+    depends_on:
+      - redis

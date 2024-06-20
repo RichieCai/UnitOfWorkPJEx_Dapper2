@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Generic\MyCommon.csproj" />
     <ProjectReference Include="..\UnitOfWorkPJEx_DapperRepository\UnitOfWorkPJEx_DapperRepository.csproj" />
     <ProjectReference Include="..\UnitOfWorkPJEx_DapperRepository_Test\UnitOfWorkPJEx_DapperRepository_Test.csproj" />
     <ProjectReference Include="..\UnitOfWorkPJEx_DapperService\UnitOfWorkPJEx_DapperService.csproj" />

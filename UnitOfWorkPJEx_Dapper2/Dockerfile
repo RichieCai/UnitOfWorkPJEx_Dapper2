@@ -8,6 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["UnitOfWorkPJEx_Dapper2/UnitOfWorkPJEx_Dapper2.csproj", "UnitOfWorkPJEx_Dapper2/"]
+#COPY ["UnitOfWorkPJEx_DapperService/UnitOfWorkPJEx_DapperService.csproj", "UnitOfWorkPJEx_DapperService/"]
+#COPY ["Generic/MyCommon.csproj", "Generic/"]
+#COPY ["UnitOfWorkPJEx_DapperRepository/UnitOfWorkPJEx_DapperRepository.csproj", "UnitOfWorkPJEx_DapperRepository/"]
 RUN dotnet restore "UnitOfWorkPJEx_Dapper2/UnitOfWorkPJEx_Dapper2.csproj"
 COPY . .
 WORKDIR "/src/UnitOfWorkPJEx_Dapper2"
