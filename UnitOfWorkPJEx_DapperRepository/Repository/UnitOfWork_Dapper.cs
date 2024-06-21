@@ -73,11 +73,5 @@ namespace UnitOfWorkPJEx_DapperRepository.Repository
                 }
             }
         }
-
-        //~UnitOfWork_Dapper()
-        //{
-        //    Dispose(false);
-        //}
-
     }
 }

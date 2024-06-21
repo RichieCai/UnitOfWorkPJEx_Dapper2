@@ -9,13 +9,11 @@ namespace UnitOfWorkPJEx_DapperRepository.Repository
     {
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
-
         public DbConnectionFactory(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
-
         public IDbConnection CreateConnection()
         {
             return new SqlConnection(_connectionString);

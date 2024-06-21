@@ -3,6 +3,8 @@ using UnitOfWorkPJEx_DapperService.Interface;
 using UnitOfWorkPJEx_DapperService.Service;
 using  UnitOfWorkPJEx_DapperService;
 using UnitOfWorkPJEx_Dapper2;
+using UnitOfWorkPJEx_DapperRepository.Interface;
+using UnitOfWorkPJEx_DapperRepository.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,14 +15,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<ICountryService, CountryService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Logging.AddLog4Net("Configs/log4net.Config");
 
-ServiceExtension_Service.AddDbContexts(builder);//將註冊地方更改為UserManageRepository專案;
-ServiceExtension_Repository.AddDbContexts(builder);//將註冊地方更改為UserManageRepository專案;
+ServiceExtension_Service.AddDbContexts(builder);//將註冊地方更改為UnitOfWorkPJEx_DapperService專案;
+ServiceExtension_Repository.AddDbContexts(builder);//將註冊地方更改為UnitOfWorkPJEx_DapperRepository專案;
+
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICountryService, CountryService>();
+builder.Services.AddScoped<IUserGenericService, UserGenericService>();
 
 //builder.Services.AddSwaggerGen(c =>
 //{
