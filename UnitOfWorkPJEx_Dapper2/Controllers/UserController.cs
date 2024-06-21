@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using UnitOfWorkPJEx_DapperRepository.Context;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using UnitOfWorkPJEx_DapperRepository.Models.Input;
 using UnitOfWorkPJEx_DapperService.Interface;
+using UnitOfWorkPJEx_DapperService.Service;
 
 namespace UnitOfWorkPJEx_Dapper.Controllers
 {
@@ -10,91 +10,74 @@ namespace UnitOfWorkPJEx_Dapper.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _iUserService;
+        private readonly IUserService _iuserService;
         private ILogger<UserController> _logger;
+        private readonly IMapper _mapper;
 
 
-        public UserController(IUserService iUserService,  ILogger<UserController> logger)
+        public UserController(IUserService iUserService, ILogger<UserController> logger, IMapper mapper)
         {
-            _iUserService = iUserService;
+            _iuserService = iUserService;
             _logger = logger;
+            _mapper = mapper;
+        }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _iuserService.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllUsers()
         {
-            _logger.LogInformation($"{this.GetType()},調用");
-            // var UserList = await _dbcontext.Users.ToListAsync();
-            var UserList = await _iUserService.GetUserAll();
-            if (UserList == null)
-            {
-                return NotFound();
-            }
-            return Ok(UserList);
+            var users = await _iuserService.GetAllUsersAsync();
+            return Ok(users);
         }
-
-        [HttpGet("{UserId}")]
-        public async Task<IActionResult> Get(int UserId)
-        {
-            _logger.LogInformation($"{this.GetType()},調用");
-            var vUser = await _iUserService.GetById(UserId);
-            if (vUser == null)
-            {
-                return NotFound();
-            }
-            return Ok(vUser);
-        }
-
-        [HttpGet("Query")]
-        public async Task<IActionResult> Get([FromQuery] UserInput input)
-        {
-            _logger.LogInformation($"{this.GetType()},調用");
-            var vUser = await _iUserService.Get(input);
-            if (vUser == null)
-            {
-                return NotFound();
-            }
-            return Ok(vUser);
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> AddUser([Bind("UserName,Age,Sex,CountryId,CityId")] User user)
         {
-            _logger.LogInformation($"{this.GetType()},調用");
-            var IsCreated = await _iUserService.AddAsync(user);
-            if (IsCreated)
+           // var userData = _mapper.Map<UnitOfWorkPJEx_DapperRepository.Models.Data.User>(user);
+            var userData = new UnitOfWorkPJEx_DapperRepository.Models.Data.User()
             {
-                return Ok(IsCreated);
-            }
-            return BadRequest();
+                CityId = user.CityId,
+                Sex = (byte)user.Sex,
+                Age = user.Age,
+                UserName = user.UserName,
+                CountryId = user.CountryId,
+            };
+            await _iuserService.AddUserAsync(userData);
+            return Ok("新增成功");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            await _iuserService.DeleteUserAsync(id);
+            return Ok("刪除成功");
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateUser(User user)
         {
-            _logger.LogInformation($"{this.GetType()},調用");
-            var IsUpdate = await _iUserService.UpdateAsync(user);
-            if (IsUpdate)
+            var userData = new UnitOfWorkPJEx_DapperRepository.Models.Data.User()
             {
-                return Ok(IsUpdate);
-            }
-            return BadRequest();
-
+                UserId = (int)user.UserId,
+                CityId = user.CityId,
+                Sex = (byte)user.Sex,
+                Age = user.Age,
+                UserName = user.UserName,
+                CountryId = user.CountryId,
+            };
+            await _iuserService.UpdateUserAsync(userData);
+            return Ok("更新成功");
         }
 
-        [HttpDelete("{UserId}")]
-        public async Task<IActionResult> DeleteUser(int UserId)
-        {
-            _logger.LogInformation($"{this.GetType()},調用");
-            var IsDelete = await _iUserService.DeleteAsync(UserId);
-            if (IsDelete)
-            {
-                return Ok(IsDelete);
-            }
-            return BadRequest();
-
-        }
     }
 }

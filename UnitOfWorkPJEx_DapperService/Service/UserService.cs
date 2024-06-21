@@ -1,8 +1,7 @@
 ﻿using MyCommon.Interface;
 using UnitOfWorkPJEx_DapperRepository.Interface;
-using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using UnitOfWorkPJEx_DapperRepository.Models.Input;
-using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
+using UnitOfWorkPJEx_DapperRepository.Models.Data;
+using UnitOfWorkPJEx_DapperRepository.Repository;
 using UnitOfWorkPJEx_DapperService.Interface;
 
 namespace UnitOfWorkPJEx_DapperService.Service
@@ -10,79 +9,55 @@ namespace UnitOfWorkPJEx_DapperService.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IMsDBConn _msDBConn;
-        //private readonly  IGenericRepository<User> _GenrRepo;
+        private readonly IUnitOfWork_Dapper _iunitOfWork_Dapper;
 
-        public UserService(IMsDBConn msDBConn, IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IUnitOfWork_Dapper iunitOfWork_Dapper)
         {
+            _iunitOfWork_Dapper = iunitOfWork_Dapper;
             _userRepository = userRepository;
-            _msDBConn = msDBConn;
-            // _GenrRepo = GenrRepo;
         }
 
-        public async Task<User?> GetById(int UserId)
+        public async Task<User> GetUserByIdAsync(int id)
         {
-            if (UserId <= 0) return null;
-            var User = await _userRepository.GetById<User>(UserId.ToString());
-            return User;
+            return await _userRepository.GetUserByIdAsync(id);
         }
 
-        public async Task<ResultVM<UserVM>> Get(UserInput input)
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            var User = await _userRepository.Get<UserVM>(input);
-            return User;
+            return await _userRepository.GetAllUsersAsync();
         }
 
-
-        public async Task<IEnumerable<User>> GetUserAll()
+        public async Task AddUserAsync(User user)
         {
-            // var userslist =  _GenrRepo.GetAll<User>();
-            var userslist = await _userRepository.GetAll<User>();
-            return userslist;
+            await _userRepository.AddUserAsync(user);
+            _iunitOfWork_Dapper.Commit();
+        }
+        public async Task DeleteUserAsync(int id)
+        {
+            try
+            {
+                await _userRepository.DeleteUserAsync(id);
+                _iunitOfWork_Dapper.Commit();
+            }
+            catch (Exception ex)
+            {
+                _iunitOfWork_Dapper.Rollback();
+                throw new Exception("刪除使用者時發生錯誤", ex);
+            }
         }
 
-        public async Task<bool> AddAsync(User user)
+        public async Task UpdateUserAsync(User user)
         {
-            if (user == null) return false;
-
-            var newUser = await _userRepository.GetById<User>(user.UserId.ToString());
-            if (newUser != null) return false;
-
-            bool bResult = await _userRepository.AddAsync(user);
-            _msDBConn.Commit();
-            return bResult;
-        }
-
-        public async Task<bool> UpdateAsync(User updateUser)
-        {
-            if (updateUser == null) return false;
-            
-            var updateHaveUser = await _userRepository.GetById<User>(updateUser.UserId.ToString());
-            if (updateHaveUser == null) return false;
-
-            var newUser = new User();
-            newUser.UserName = updateUser.UserName;
-            newUser.UserId = updateUser.UserId;
-            newUser.Sex = updateUser.Sex;
-            newUser.Age = updateUser.Age;
-            newUser.CityId = updateUser.CityId;
-            newUser.CountryId = updateUser.CountryId;
-
-            bool bResult = await _userRepository.UpdateAsync(newUser);
-            _msDBConn.Commit();
-            return bResult;
-        }
-
-        public async Task<bool> DeleteAsync(int UserId)
-        {
-            if (UserId <= 0) return false;
-            
-            var newUser = await _userRepository.GetById<User>(UserId.ToString());
-            if (newUser == null) return false;
-            
-            bool bResult = await _userRepository.DeleteAsync(newUser);
-            _msDBConn.Commit();
-            return bResult;
+            try
+            {
+                await _userRepository.UpdateUserAsync(user);
+                _iunitOfWork_Dapper.Commit();
+            }
+            catch (Exception ex)
+            {
+                _iunitOfWork_Dapper.Rollback();
+                throw new Exception("更新使用者時發生錯誤", ex);
+            }
         }
     }
 }

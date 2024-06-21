@@ -2,7 +2,7 @@ using UnitOfWorkPJEx_DapperRepository;
 using UnitOfWorkPJEx_DapperService.Interface;
 using UnitOfWorkPJEx_DapperService.Service;
 using  UnitOfWorkPJEx_DapperService;
-using UnitOfWorkPJEx_DapperRepository;
+using UnitOfWorkPJEx_Dapper2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICountryService, CountryService>();
-builder.Services.AddTransient<IUserService2, UserService2>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Logging.AddLog4Net("Configs/log4net.Config");
 
 ServiceExtension_Service.AddDbContexts(builder);//將註冊地方更改為UserManageRepository專案;

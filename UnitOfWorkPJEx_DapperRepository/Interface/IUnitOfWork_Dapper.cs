@@ -2,12 +2,11 @@
 
 namespace UnitOfWorkPJEx_DapperRepository.Interface
 {
-    public interface IUnitOfWork_Dapper 
+    public interface IUnitOfWork_Dapper : IDisposable
     {
         IDbConnection Connection { get; }
         IDbTransaction Transaction { get; }
-        IUserUnitRepository Users { get; }
-
         void Commit();
+        void Rollback();
     }
 }

@@ -1,22 +1,15 @@
-﻿using Dapper;
-using MyCommon;
-using UnitOfWorkPJEx_DapperRepository.Models.DataModels;
-using UnitOfWorkPJEx_DapperRepository.Models.Input;
-using UnitOfWorkPJEx_DapperRepository.Models.ViewModels;
+﻿using UnitOfWorkPJEx_DapperRepository.Models.Data;
 
 namespace UnitOfWorkPJEx_DapperRepository.Interface
 {
-    public interface IUserRepository
+    public interface IUserRepository 
     {
-        Task<T?> GetById<T>(string UserId);
-        Task<IEnumerable<User>> GetAll<User>();
-        Task<ResultVM<UserVM>> Get<UserVM>(UserInput input);
-        Task<bool> AddAsync(User user);
+        Task<User> GetUserByIdAsync(int id);
+        Task<IEnumerable<User>> GetAllUsersAsync();
 
-        Task<bool> UpdateAsync(User user);
-
-        bool Update(User user);
-
-        Task<bool> DeleteAsync(User user);
+        Task<int> AddUserAsync(User user);
+        Task<int> AddUserAsyncReturn(User user);
+        Task<int> DeleteUserAsync(int iUserId);
+        Task<int> UpdateUserAsync(User user);
     }
 }

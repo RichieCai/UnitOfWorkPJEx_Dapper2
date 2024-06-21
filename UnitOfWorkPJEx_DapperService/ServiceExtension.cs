@@ -16,17 +16,10 @@ namespace UnitOfWorkPJEx_DapperService
         public static void AddDbContexts(WebApplicationBuilder? builder)
         {
             //builder.Services.AddSingleton<IConfiguration>(configuration);
-            builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(builder.Configuration.GetConnectionString(_DefConnectionName)));
-            builder.Services.AddTransient<IDbTransaction>(sp =>
-            {
-                var connection = sp.GetRequiredService<IDbConnection>();
-                return connection.BeginTransaction();
-            });
-
+            builder.Services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
+            builder.Services.AddScoped<IUnitOfWork_Dapper, UnitOfWork_Dapper>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<ICountryRepository, CountryRepository>();
-            builder.Services.AddTransient<IUserUnitRepository, UserUnitRepository>();
-            builder.Services.AddTransient<IUnitOfWork_Dapper, UnitOfWork_Dapper>();
 
             //  builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             //  builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
